@@ -1,0 +1,35 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qfedu.mapper.EmpMapper">
+    <insert id="addEmp">
+        insert into t_emp values(null,#{no},'123456',#{name},#{did},1,#{sex},#{email},#{qq},#{phone},#{createdate},#{photo},0)
+    </insert>
+
+    <select id="login" resultType="com.qfedu.pojo.Emp">
+        select * from t_emp where no=#{no} and pass=#{pass} and del=0
+
+    </select>
+    <select id="getEmpCount" resultType="java.lang.Integer">
+        select count(id) from t_emp where del=0
+    </select>
+    <select id="getEmps" resultMap="EmpMap">
+        select E.*,D.name as 'dname' from t_emp E inner join t_depart D on E.did = D.id where E.del=0 limit #{pageStart},#{pageSize}
+
+    </select>
+    <resultMap id="EmpMap" type="Emp">
+    <id column="id" property="id"/>
+        <result column="no" property="no"/>
+        <result column="pass" property="pass"/>
+        <result column="name" property="name"/>
+        <result column="sex" property="sex"/>
+        <result column="email" property="email"/>
+        <result column="qq" property="qq"/>
+        <result column="phone" property="phone"/>
+        <result column="photo" property="photo"/>
+        <result column="createdate" property="createdate"/>
+        <association property="depart" javaType="Depart">
+            <result column="dname" property="name"/>
+        </association>
+    </resultMap>
+</mapper>
